@@ -1,0 +1,60 @@
+
+C:\Users\mcs\Documents\CURSOS\SpringFullStack_OnLine\CODIGO\CURSO\EXAMEN\monolito\mediapp-frontend
+
+COMPATIBILIDAD: Angular --version Angular CLI: 10.2.0, Node: 12.13.1
+ng s --port <puerto>
+
+1- Instalar Angular CLI (ejecutar esto solo una vez por maquina):	npm install -g @angular/cli
+2- Nuevo proyecto: 							ng new <nombre-proyecto>
+3- Ejecutar proyecto angular: 						ng serve | ng serve -o | ng s | ng s -o
+4- Crear nuevo Service: 						ng generate service [carpeta]/<nombreServicio> --skipTests
+5- Crear un nuevo componente: 						ng generate component nombre_componente | ng g c <nombre_componente>
+6- Crear un nuevo componente sin el archivo pruebas: 			ng g c <nombre_componente> --skipTests
+7- Descargar nuevamente dependencias para la carpeta node_modules en el proyecto	npm install | npm i
+8- Atajos Teclado VSC Buscar archivo:					Ctl+p
+9- Instalara paquetes (Agregar libreria):				ng add @angular/material
+10-Crear un nuevo servicio: 						ng g s _service/paciente --skipTests
+11-Crear un nuevo modulo:						ng g m material
+
+12- Instalar BootsTrap Angular:						npm isntall bootstrap jquery proper.js --save
+									agregar: angular.json/styles "node_modules/bootsatrap/dist/css/bootstrap.min.css"
+										 angular.json/scripts "node_modules/jquey/dist/jquery.min.js",
+												      "node_modules/proper.js/dist/umd/proper.min.js",
+												      "node_modules/bootstrap/dist/js/bootstrap.min.js"
+13- Instalar Angular Material 						ng add @angular/material
+14- Instalar PrimeNG Angular						npm install primeng --save, npm install primeicons --save 
+15- ng build --prod 							Compilar y generar los fuentes para el deploy (prvia implementacion de los environment.prod.ts y environmet.ts)
+
+
+MIGRAR VERSION (revisar la referencia de Angular Udate Guide en http://wwww.update.angular.io )
+- npm install @angular/cli -g
+- git int								Es requisito para migrar de version
+- git add
+- git commit -m "commit"						Commit de forma local
+- ng update @angular/core @angular/cli @angular/material @angular/cdk	Actualizaciones varias (o actualizar todas las dependencias en package.json descritas en dependencies:)
+
+
+ICONOS APLICACION EN: flaticon.es
+
+$ npm uninstall -g @angular/cli
+$ npm cache clean
+$ npm install -g @angular/cli
+
+npm install -g @angular/cli@1.0.0
+
+Manejo de Eventos
+ (keyup)="metodo_maneja_evento($event)"  
+  - (keyup) Dispara la ejecusion del metodo
+  - metodo_maneja_evento manejara la logica desde el .ts
+  - $event es palabra reservada de Angular que pasa el evento que disparo la ejecusion del metodo
+ Ejemplos: Calculadora
+	1) 		<input type="number" (keyup)="recibirTecla($event)">
+	2) 		<button (click)="calcular('s')">Sumar</button>
+ 
+-----------------------------------------------------------
+
+@Inject(MAT_DIALOG_DATA) private data: Medico  ---->   Envia la data desde un componente a una Ventana de Dialogo
+-----------------------------------------------------------
+[(ngModel)]="medico.nombres"   ----> Para referenciar objetos del modelo desde un html sin <form ...   ----> importar FormModule en app.module.ts
+-----------------------------------------------------------
+(change)="seleccionarArchivo($event)"    ---->  toma el evento de un <input ... y dipara la ejecusion del metodo pasando el objeto del evento que lo provoco

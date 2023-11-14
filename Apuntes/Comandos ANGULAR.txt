@@ -1,0 +1,146 @@
+Compatibilidad: 
+Angular –v  	v12.13.1 	
+npm –v   	6.14.15
+
+ng --version:
+- Angular CLI: 10.2.0
+- Node: 12.13.1 
+
+Cambio de puerto:
+ng s --port <puerto>
+
+Instalar Angular CLI (ejecutar esto solo una vez por maquina):
+npm install -g @angular/cli	
+Version en particular: npm install -g @angular/cli@1.0.0
+
+Desinstalar Angular CLI
+npm uninstall -g @angular/cli
+npm cache clean
+npm install -g @angular/cli
+
+Nuevo proyecto:
+ng new <nombre-proyecto>
+
+Crear un nuevo módulo:
+ng g m material
+
+Descargar nuevamente dependencias del proyecto para la carpeta node_modules (estando dentro de la carpeta del proyecto)	
+npm install | npm i
+
+Ejecutar proyecto angular:
+ ng serve | ng serve -o | ng s | ng s –o
+ 
+Instalar libreria para manejo de fechas
+https://momentjs.com/
+npm install moment --save
+
+Instalación de la libreria FLEX
+npm install @angular/flex-layout --save
+
+Instalación de Chart JS
+npm install chart.js --save
+npm install chart.js@2.9.4
+
+Instalación de visor PDF en html
+npm install ng2-pdf-viewer
+
+
+Instalación de bootstrap:
+npm install bootstrap jquery popper.js –save
+
+Instalar Angular Material:
+ng add @angular/material
+
+Instalación de PrimeNG
+npm install primeng primeicons –save
+
+Crear un nuevo componente:
+ng generate component nombre_componente | ng g c <nombre_componente>
+
+Crear nuevo Service:
+ ng generate service [carpeta]/<nombreServicio> --skipTests
+ng g s _service/paciente –skipTests
+
+Crear un nuevo componente sin el archivo pruebas:
+ng g c <nombre_componente> --skipTests
+
+Migrar la app a una version más actual: Angular Update Guide
+Npm install @angular/cli -g
+ng update @angular/core @angular/cli @angular/material @angular/cdk
+
+Generación de los fuentes del proyecto angular
+ng build –prod
+
+
+Isntalacion de boostrap:
+npm install bootstrap jquery popper.js --save
+
+
+Atajos Teclado VSC:
+Ctl+p   Buscar archivo
+Ctrl + Shift + 0      Accede a los identificadores dentro del archivos
+Shift + Alt + ↑ ó ↓  	Clona el Código  
+Ctrl + b    		Ocultar Barra lateral
+Ctrl + Shift + P ó F1 	Muestra la paleta de Comandos
+Ctrl + Shift + F 	Busca en todo el proyecto
+Shift + Alt + F		Formatea el código a la conf. actual
+Alt +Clic		Añadir Cursor
+Ctrl + P		Abrir Rápido ó Ir al Archivo
+
+Instalar paquetes (Agregar librería):
+ng add @angular/material
+
+Instalar BootsTrap Angular:
+npm install bootstrap jquery proper.js –save
+agregar: 
+angular.json/styles "node_modules/bootsatrap/dist/css/bootstrap.min.css",
+“angular.json/scripts "node_modules/jquey/dist/jquery.min.js",
+"node_modules/proper.js/dist/umd/proper.min.js",
+"node_modules/bootstrap/dist/js/bootstrap.min.js"
+
+
+
+
+Instalar Angular Material
+ng add @angular/material
+
+Instalar PrimeNG Angular
+npm install primeng --save, npm install primeicons --save
+
+Compilar y generar los fuentes para el deploy (prvia implementacion de los environment.prod.ts y environmet.ts)
+ng build --prod
+
+
+MIGRAR VERSION (revisar la referencia de Angular Udate Guide en http://wwww.update.angular.io )
+npm install @angular/cli -g
+git int	(Es requisito para migrar de version)
+git add
+git commit -m "commit"	Commit de forma local
+ng update @angular/core @angular/cli @angular/material @angular/cdk	Actualizaciones varias (o actualizar todas las dependencias en package.json descritas en dependencies:)
+
+
+ICONOS PARA LA APLICACION EN: flaticon.es
+
+Manejo de Eventos: Con Parentesis
+ (keyup)="metodo_maneja_evento($event)"  
+  - (keyup) Dispara la ejecución del método
+  - metodo_maneja_evento manejara la lógica desde el .ts
+  - $event es palabra reservada de Angular que pasa el evento que disparo la ejecución del método
+
+Manejo de Atributos:
+- Los atributos se modifican con corchetes [ ]
+
+ Ejemplos: Calculadora
+<input type="number" (keyup)="recibirTecla($event)">
+<button (clic)="calcular('s')">Sumar</button>
+ 
+Envía la data desde un componente a una Ventana de Dialogo:
+@Inject(MAT_DIALOG_DATA) private data: Medico
+
+Para referenciar objetos del modelo desde un html sin <form ...    importar FormModule en app.module.ts
+ [(ngModel)]="medico.nombres" 
+
+Toma el evento de un <input... y dispara la ejecución del método pasando el objeto del evento que lo provoco
+(change)="seleccionarArchivo($event)" 
+
+↓

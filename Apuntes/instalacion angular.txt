@@ -1,0 +1,5 @@
+ng new ang-bootstrap npm install bootstrap jquery popper.js --save, ng new ang-material, ng new ang-prime
+
+Angular 10.2.0
+Node 12.13.1
+

@@ -1,0 +1,32 @@
+
+	@Inject(MAT_DIALOG_DATA) private data: Medico
+		Envia la data|valor de una variable desde un componente a otro.
+		EJEMPLO:  generic.service.ts: @Inject(String) protected url: string	--> registrarTransaccion(consultaDTO: ConsultaListaExamenDTO) { return this.http.post(this.url, consultaDTO); }	
+	
+	[(ngModel)]="medico.nombres"
+		Crea una instancia FormControl a partir de un modelo de dominio y la vincula a un elemento de control de formulario.
+		EJEMPLO:  calculadora.componenet.html: <input type="number" [(ngModel)]="num"> -->  caculadora.component.ts: num: number;
+
+	(change)="seleccionarArchivo($event)"
+		toma el evento de un <input ... y dipara la ejecusion del metodo pasando el objeto del evento que lo provoco
+		Ejemplo:  	HTML: <button (click)="calcular('s')">Suma</button>
+					TypeScrypt: recibirTecla2(e: any){ this.num2 = +e.target.value; } 
+
+	@ViewChild(MatPaginator) paginator: MatPaginator;
+		para acceder a una directiva, un componente secundario o un elemento DOM de una clase principal de componentes
+		
+	(ngSubmit): Habilita el enlace de expresiones AngularJS a eventos onsubmit; Además, impide la acción predeterminada 
+		(que para el formulario significa enviar la solicitud al servidor y volver a cargar la página actual), pero solo si el formulario no contiene , 
+		o atributos.actiondata-actionx-action, Tenga cuidado de no provocar "doble envío" mediante el uso de los controladores ngClick ngSubmit ngSubmit
+		EJEMPLO:  buscar.component.html:  (ngSubmit)="buscar() -->  buscar.component.ts: buscar() { }
+		
+	[formGroup], [FormControl], [FormArray]
+		Realiza un seguimiento del valor y el estado de validez de un grupo de instancias.
+		EJEMPLO: buscar.componenet.html: <form [formGroup]="form" 		--> 	
+		ngOnInit(): void { 
+			this.form = new FormGroup({ 
+			'dni': new FormControl(''), 
+			'nombreCompleto': new FormControl(''),
+			'fechaConsulta': new FormControl()
+			});
+		}
