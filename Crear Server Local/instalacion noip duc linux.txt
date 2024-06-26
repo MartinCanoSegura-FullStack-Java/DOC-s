@@ -1,0 +1,137 @@
+    COMO DESCARGAR Y CONFIGURAR EL CLIENTE DE        ACTUALIZACIÓN DINÁMICO No-IP EN UBUNTU 20.04
+
+       Dynamic DNS Update Client (DUC)
+
+        
+ 1) ABRIR UNA TERMINAL
+ 
+ 2) INICIAR SESIÓN COMO USUARIO ROOT
+     • sudo -i
+ 
+ 2.1) Probar si (el compilador) make esta instalado. si no ejecutar: Instalacion de make compiler
+		
+
+ 3) DESCARGAR EL CLIENTE:
+  ▪ cd /usr/local/src
+  ▪ wget https://www.noip.com/client/linux/noip-duc-linux.tar.gz
+
+  ▪ tar xzf noip-duc-linux.tar.gz
+  ▪ cd no-ip-2.1.9
+
+
+ 4) INSTALAR EL CLIENTE
+  ▪ make
+  ▪ make install
+      ◦ correo
+      ◦ contraseña
+      ◦ Elegir host
+        
+	   Instalacion de make (compiler)
+   ◦  apt-get update
+   ◦  apt-get install make
+   ◦  apt-get install build-essential 
+
+ 5) EJECUTAR EL CLIENTE
+  ▪ /usr/local/bin/noip2
+
+	noip2 -S
+	
+	==============
+	Process 59301, started as /usr/local/src/noip-2.1.9-1/noip2, (version 2.1.9)
+	Using configuration from /usr/local/etc/no-ip2.conf
+	Last IP Address set 187.188.14.231
+	Account maquina.virtual.1706@gmail.com
+	configured for:
+			host  xanum.ddns.net
+	Updating every 30 minutes via /dev/wlo1 with NAT enabled.
+
+	==============
+
+
+ 6) EJECUTAR EL CLIENTE AUTOMATICAMENTE CUANDO EL EQUIPO SE ENCIENDA
+
+nano /usr/local/src/noip-2.1.9-1/README.FIRST
+
+{{{{{{{{{{{{{
+Ingresamos a la Carpeta
+cd /etc/systemd/system
+
+Creamos El Scrip
+sudo nano noip2.service
+
+Pegamos
+----------------
+[Unit]
+Description=No-Ip Dynamic DNS Update Service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/noip2
+
+[Install]
+WantedBy=multi-user.target
+----------------------
+
+Recargamos los servicios incluido el agregado
+systemctl daemon-reload
+
+Habilitamos el Servicio para cualquier reinicio
+systemctl enable /etc/systemd/system/noip2.service
+
+Chequear funcionamiento del servicio
+sudo service noip2.service start
+sudo systemctl status noip2.service
+
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+
+
+--------------------------
+maquina.virtual.1706@gmail.com
+Mecano007
+
+[xanum.ddns.net]
+
+Process 222494, started as /usr/local/src/noip-2.1.9-1/noip2, (version 2.1.9)
+Using configuration from /usr/local/etc/no-ip2.conf
+Last IP Address set 187.188.14.231
+Account maquina.virtual.1706@gmail.com
+configured for:
+        host  xanum.ddns.net
+Updating every 30 minutes via /dev/wlo1 with NAT enabled.
+	xanum.ddns.net was already set to 187.188.14.231
+
+****************************************************************************************************************
+Un problema con la partición de arranque del disco duro
+		Una mala actualización del Kernel.
+		Un parche mal aplicado en el sistema
+		Si tenemos Dual-Boot
+		Problemas con el Fast Boot de Windows
+		Una mala configuración de GRUB. ::: Si las entradas del gestor de arranque de Linux están mal configuradas, con razón no vamos a poder arrancar el equipo. Tendremos que reparar el gestor de arranque para que vuelva a funcionar.
+		Una mala configuración de la BIOS/UEFI :: que no apunta a la partición correcta. Si estamos intentando arrancar el ordenador desde el disco duro incorrecto, entonces tendremos que cambiar la unidad de arranque para que el sistema pueda iniciar.
+		Problemas con la función Arranque seguro / Secure Boot
+		
+		Reset System
+*******************************************************************************************************************		
++++++++++++++
+Auto configuration for Linux client of no-ip.com.
+
+Please enter the login/email string for no-ip.com  maquina.virtual.1706@gmail.com
+Please enter the password for user 'maquina.virtual.1706@gmail.com'  *********
+
+Only one host [xanum.ddns.net] is registered to this account.
+It will be used.
+Please enter an update interval:[30]  30
+Do you wish to run something at successful update?[N] (y/N)  n
+
+New configuration file '/tmp/no-ip2.conf' created.
+
+mv /tmp/no-ip2.conf /usr/local/etc/no-ip2.conf
++++++++++++++++++++++
+Process 30076, started as /usr/local/src/noip-2.1.9-1/noip2, (version 2.1.9)
+Using configuration from /usr/local/etc/no-ip2.conf
+Last IP Address set 187.188.14.231
+Account maquina.virtual.1706@gmail.com
+configured for:
+        host  xanum.ddns.net
+Updating every 30 minutes via /dev/wlo1 with NAT enabled.

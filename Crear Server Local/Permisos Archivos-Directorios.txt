@@ -1,0 +1,93 @@
+PERMISOS DE ARCHIVOS Y DIRECTORIOS:
+	
+	https://www.linuxtotal.com.mx/index.php?cont=info_admon_011
+	
+	$> ls -l
+		-rwxrwxr--  1 sergio ventas    9090 sep  9 14:10 presentacion
+		-rw-rw-r--  1 sergio sergio 2825990 sep  7 16:36 reporte1
+		drwxr-xr-x  2 sergio sergio    4096 ago 27 11:41 videos
+		
+		* La primera columna (-rwxrwxr--) es el tipo de archivo y sus permisos
+		* la siguiente columna (1) es el número de enlaces al archivo
+		* la tercera columna (sergio) representa al propietario del archivo
+		* la cuarta columna (ventas) representa al grupo al que pertence al archivo 
+		* las siguientes son el tamaño, la fecha y hora de última modificación
+		* por último el nombre del archivo o directorio
+		
+	El primer caracter al extremo izquierdo, representa el tipo de archivo, los posibles valores para esta posición son los siguientes:
+		- un guión representa un archivo comun (de texto, html, mp3, jpg, etc.)
+		d representa un directorio
+		l link, es decir un enlace o acceso directo
+		b binario, un archivo generalmente ejecutable
+	Los siguientes 9 restantes, representan los permisos del archivo y deben verse en grupos de 3.
+	
+	Los tres primeros representan los permisos para el propietario del archivo. 
+	Los tres siguientes son los permisos para el grupo del archivo
+	tres últimos son los permisos para el resto del mundo o otros.
+		rwx       rwx     rwx
+		usuario   grupo   otros
+
+	En cuanto a las letras, su significado son los siguientes:
+		r read - lectura
+		w write - escritura (en archivos: permiso de modificar, en directorios: permiso de crear archivos en el dir.)
+		x execution - ejecución
+		
+	Permisos en formato numérico octal:
+		La cambinación de valores de cada grupo de los usuarios forma un número octal, 
+		el bit x es 20 es decir 1, el bit w es 21 es decir 2, el bit r es 22 es decir 4, tenemos entonces:
+			r = 4
+			w = 2
+			x = 1
+
+		- - -	= 0	no se tiene ningún permiso
+		- - x	= 1	solo permiso de ejecución
+		- w -	= 2	solo permiso de escritura
+		- w x	= 3	permisos de escritura y ejecución
+		r - -	= 4	solo permiso de lectura
+		r - x	= 5	permisos de lectura y ejecución
+		r w -	= 6	permisos de lectura y escritura
+		r w x	= 7	todos los permisos establecidos, lectura, escritura y ejecución
+
+		Permisos	Valor	Descripción
+		rw-------	600	El propietario tiene permisos de lectura y escritura.
+		rwx--x--x	711	El propietario lectura, escritura y ejecución, el grupo y otros solo ejecución.
+		rwxr-xr-x	755	El propietario lectura, escritura y ejecución, el grupo y otros pueden leer y ejecutar el archivo.
+		rwxrwxrwx	777	El archivo puede ser leido, escrito y ejecutado por quien sea.
+		r--------	400	Solo el propietario puede leer el archivo, pero ni el mismo puede modificarlo o ejecutarlo y por supuesto ni elgrupo ni otros pueden hacer nada en el.
+		rw-r-----	640	El usuario propietario puede leer y escribir, el grupo puede leer el archivo y otros no pueden hacer nada.
+		
+		EJEMPLOS 1:
+			$> chmod 755 reporte1			establecen los permisos correspondientes que el usuario propietario desea establecer
+			$> chmod 511 respaldo.sh		establecen los permisos correspondientes que el usuario propietario desea establecer
+			$> chmod 700 julio*				cambiará los permisos a todos los archivos que empiezen con julio (julio01, julio02, julio_respaldo, etc.) debido al caracter '*' 
+			$> chmod 644 *					cambiará los permisos a los archivos dentro del directorio actual, debido al caracter '*' 
+		
+		EJEMPLOS 2:
+			chmod -R 755 respaldos/*		cambiará los permisos a 755 (rwxr-xr-x) del directorio respaldos y de todos los subdirectorios y archivos que estén contenidos dentro de este.
+	
+	Estableciendo permisos en modo simbólico
+		Otra manera popular de establecer los permisos de un archivo o directorio es a través de identificadores del bit (r,w, o x) de los permisos, 
+		como ya se vió anteriormente, pero ahora identificando además lo siguiente:
+			al usuario con la letra u
+			al grupo con la letra g
+			a otros usuarios con la letra o
+			y cuando nos referimos a todos (usuario, grupo, otros) con la letra a (all, todos en inglés)
+		
+		el signo + para establecer el permiso
+		el signo - para eliminar o quitar el permiso
+		
+		La sintaxis es muy simple chmod augo[+|-]rwx[,...] archivo[s]
+		
+		Ejemplo 1: si queremos que otros tengan permiso de escritura sería chmod o+w archivo
+		Ejemplo 2: todos los usuarios con permisos de ejecución seria chmod a+x archivo
+		
+		En este modo de establecer permisos, solo hay que tomar en cuenta que partiendo de los permisos ya establecidos se agregan o se quitan a los ya existentes.
+		Veámoslo con ejemplos su manera de trabajar:
+			
+		Actual			chmod			Resultado		Descripción
+			rw-------	a+x				rwx--x--x		Agregar a todos (all) permisos de escritura.
+			rwx--x--x	go-x			rwx------		Se eliminan permiso de ejecución para grupo y otros.
+			rwxr-xr-x	u-x,go-r		rw---x--x		Al usuario se le quita ejecución, al grupo y otros se le quita lectura.
+			rwxrwxrwx	u-x,go-rwx		rw-------		Al usuario se le elimina ejecución, al grupo y otros se eliminan todos los permisos.
+			r--------	a+r,u+w			rw-r--r--		A todos se les agrega lectura, al usuario se le agrega escritura.
+			rw-r-----	u-rw,g+w,o+x	---rw---x		Al usuario se le eliminan lectura y escritura, al grupo se le agrega lectura y otros se le agrega ejecución.

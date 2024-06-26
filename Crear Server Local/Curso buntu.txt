@@ -1,0 +1,170 @@
+
+	lsb_release -a			Distribucion y Version de lunux Instalada
+
+	https://www.youtube.com/watch?v=ylS2kgdtQKk&list=PL2Z95CSZ1N4GQUzO4aGda6UEmq4yqPLMN&index=10	
+	Curso de Ubuntu Server 20 desde cero para principiantes | CONEXION REMOTA [PUTTY] (video 10)
+	
+		Para que el sistema continúe funcionando con total normalidad cuando se cierre la tapa sin que las operaciones se interrumpan :
+			sudo nano /etc/systemd/logind.conf
+				busca y cambia la opción: #HandleLidSwitch=suspend >> descomenta la opción (borra la almohadilla) y cambia el parámetro a «ignore».
+				Guardarlos cambios y reinicia los servicios de systemd con: sudo systemctl restart systemd-logind
+				Si por alguna casualidad no funciona, asegúrate que en el archivo anterior la siguiente opción esté tal cual:  LidSwitchIgnoreInhibited=no
+
+
+		ssh mcs@192.168.100.11				Conectarse desde el terminal simbolo de sistema de windows o una terminal de otro S.O.
+		ifconfig  o   ip a 					Muestra las redes del sistema
+		ip add show		(op a s)			Muestra todos los dispositivos (interfaces) de red disponibles (alambricas e inalambricas)
+		ip addr show enp0s25 				Detalles de la interfaz
+		sudo su -							Ingresar como administrador
+		ip link set enp0s25 down 			(como administrador root) Desactivar la interfaz a la que se esta conectado (hay que ir al servidor fisica mente y levantar)
+		ip link set enp0s25 up				Leantar (acticar) (como administrador root) los el servicio de conexion
+		ip route							Ver el enrutamiento de un paquete
+		hostname							Muestra el nombre del servidor
+		hostname -I							Muestra la ip del servidor
+		ip link show						Muestra el estado de la interfaz a nivel fisico
+		ping -c  3 www.google.com			hace ping solo 3 veces al host indicado
+		
+		Descarga e instalacion de Bitvise   Para copiar archivos entre maquinas remotas
+		
+		ip -s link 									Estadisticas de uso de las interfaces de red (en uso)
+		sudo systemctl list-unit-files --type service --all  		Muestra todos los servicios activos (en ejecusion=verde, no activo=disabled, relacionado a otro=static, req. ejecusion manual=maskeds, generado por script=generated)
+		sudo systemctl | grep runing				Muestra los servicios que estan en ejecusion
+		sudo systemctl start <nombre-servicio>      Para iniciar un servicio que estaba detenido
+		sudo systemctl stop <nombre-servicio>      	Para detener un servicio que estaba en ejecusion
+		sudo systemctl status <nombre-servicio>     Para conocer el status de un servicio
+		sudo apt install netstat-nat				Intalar herramienta			Conocer los puertos que estan utilizando los servicios 
+		sudo netstat -plnt							Muestra las conexiones activas en el servidor 
+		
+		 nmap 192.168.100.4 -p 80
+	
+	FIREWALL:----------------------------------------------------------------------------------------------------------------------------------------
+		Componentes de un firewall:
+		1. netfilter : Es un modulo incluido en el kernel
+		2. firewalld: Es el servicio mediante el cual se administra el firewall
+		3. firewall-cmd: Es la herrmienta a nivel de usuario, utilzada para administrar el firewal.
+		
+		sudo systemctl status firewalld				Muestra el estatus del servicio firewall 
+		sudo apt install firewalld 					Instala el packete de la herramienta firewall
+		sudo systemctl status firewalld
+		sudo apt-get update							Actualiza el sistema
+		sudo systemctl stop firewalld 				Detien el servicio de firewalld (ningun impedimiento en transito de packetes), se activa al reiniciar el sistema
+		sudo systemctl start firewalld				Iniciar el firewalld
+		sudo systemctl restart firewalld			Reiniciarel firewald
+		sudo systemctl disable firewalld			Deshabilitar el firewalld (al reiniciar el server no se levanta el firewalld)
+		sudo systemctl enable fiewall				Habilita firewall
+		
+		sudo firewall-cmd --list-all				Muestra las reglas del firewall
+		ssh = Protocolo tcp + port 22
+		sudo firewall-cmd --get-services			Lista de servicios que se pueden configurar de manera directa mediante el firewall (reglas de entrada y salida)
+		sudo firewall-cmd --get-services | grep ssh 		Filtrar a lista por algun servicio (ilumina en rojo el servico, en caso de estar)
+		sudo cat /usr/lib/firewalld/services/ssh.xml		Muestra la configuracion del servicio (puerto y protocolo asociado con el servicio) para el ejemplo ssh(tcp, 22)
+		sudo firewall-cmd --state							Saber el estatus del firewall
+		sudo firewall-cmd --get-services					Muestra que otros servicios esta utilizando el firewall
+		sudo firewall-cmd --permanent --remove-service=ssh	Elimina la regla (para bloquear) la cominicacion ssh, nadie se podra conectar al servidor mediante ssh
+		sudo firewall-cmd --reload							recargar las reglas del firewall para que se apliquen los cambios hechos
+		sudo firewall-cmd --permanent --add-service=ssh		Agrega la regla (pero ahora sdesde el servidor)  (de debe ejecutar la recarga del firewall) 
+		sudo firewall-cmd --permanent --add-port=22/tcp		Agrgar una regla por puerto y protocolo, equivalente a agregar por regla de protocolo  (tambien hay que recargar firewall)
+		sudo firewall-cmd --permanent --remove-port=22/tcp  Remueve la regla por puerto y protocolo, (tambien hay que recargar firewall)
+		
+	RICH-RULES EN EL FIREWALL:
+		ss | grep -i ssh					Muestra las conexiones por servicio 
+		ssh <user-server>@<ip-server>  >>  <password-server>     Logearse desde un command prompt de windows
+		eliminamos la conexion ssh por servicio con sudo firewall-cmd --permanent --remove-service=ssh (recargar firewall)
+		sudo firewall-cmd --permanent --add-rich-rule='rule family=ipv4 source address=192.168.100.135 service name=ssh reject'			Rechaza conexiones ssh de la ip 192.168.100.135 (recargar firewall con sudo firewall-cmd --reload)
+		sudo firewall-cmd --permanent --add-rich-rule='rule family=ipv4 source address=192.168.100.135 service name=ssh accept'			Acepta conexiones ssh .....
+		
+		INSTALACION/CREACION DE UN SERVIDOR WEB --------------------------------------------------------------------------------------------------------
+		sudo apt-get update														Actualiza el server
+		sudo apt install apche2													Instala los paquetes del servidor apache web server
+		sudo systemctl status apache2											comprueba que apache esta corriendo
+		sudo firewall-cmd --permanent --add-service=http --zone=public			Agrgando la regla http al firewall (recargar el firewall con sudo firewall-cmd --reload)
+		sudo firewall-cmd --list-all											validamos la existencia de la regla 
+		
+		INSTALR POSTGRES SQL:
+		sudo apt-get update						Buscar actualizaciones 
+		sudo apt-get install postgresql postgresql-contrib libpq-dev			Descarga e Instala psotgre ademas de unos modulos utiles
+		sudo -u postgres createuser --superuser $USER							Crear un usuario
+		sudo -u postgres createdb $USER											Crea una base de datos con el nombre del usuario logeado
+		cd /home									ir a home
+		sudo touch .psql_history					Crea un archivo oculto para almacenar los logs istorial de la ejecusiones que se van haciendo (consultas y comandos)
+		cd /										Ir al directorio raiz
+		psql										entrar a la teminal de postgres
+		\list 										Listar las bases de datos
+		exit										para slir de la base de la consola de postgres
+		systemctl list-units						muestra la lista de servicios que estan corriendo en el sistema (servidor)
+		
+	CERAR UN SERVIDOR FTP: (puertos 20 y 21)
+		sudo apt-get install vsftpd 				Instalacio de paquetes
+		sudo systemctl start vsftpd					Iniciar el servicio
+		sudo systemctl enable vsftpd				Habilitar el servicio
+		sudo systemctl status vsftpd				Verificar el estatus
+		sudo firewall-cmd --permanent --add-service=ftp --zone=public			Crear la regla en el firewall para permitir el acceso
+		sudo firewall-cmd --reload												recargar el firewall para que tenga efecto la nueva regla
+		sudo apt-get update														Actualizar el S.O.
+		Hacer prueba conexion con el cliente ftp ==>  FileZilla
+			Host=192.168.100.11		username=mcs		password=mcs007
+			Boton Site Manager (configuracion de conexion)
+				-> New Site:  Host=192.168.100.11 		Protocol=SFTP - SSH File Transfer Protocol		Logon type=Normal		User=mcs		Password=mcs007   Rename=UbuntuServer
+	
+========================================================================================================================================
+	https://www.youtube.com/watch?v=Mv8ek5o-t9s
+	INSTALACION DE JAVA:
+		sudo apt-get purge openjdk-\*				Des instalar una version de java
+		descargar la version del java desde oracle 	(jdk-8u151-linux-x64.tar.gz)
+		sudo mkdir /usr/local/java					Crear la carpeta de instalacion d java
+		sudo chmod 755 -R apache-tomcat8.5.23/		Asignar permisos a la carpeta
+		sudo cp -r jdk-8u151-linux-x64.tar.gz /usr/local/java    Copiar el archivo descargado a la carpeta creada en el server
+		cd /usr/local/java							Ir a la carpeta 
+		sudo tar -xzvf jdk-8u151-linux-x64.tar.gz	Descomprimir el archivo tar  >> ls -al >>  dos ficheros el tar.gz y otro de la carpeta del jdk
+		cd jdk1.8.0._151/							IR a la fichero  >> ls -al
+		sudo nano /etc/profile 	Edicion de archivo profile para agregar la variables de entorno :
+		Agregar las lineas al final:
+			JAVA_HOME=/usr/local/java/jdk1.8.0_151
+			JRE_HOME=$JAVA_HOME/jre
+			PATH=$PATH:$JAVA_HOME/bin;$JRE_HOME/bin
+			export JAVA_HOME
+			export JRE_HOME
+			export PATH
+			
+		sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/java/jdk1.8.0_151/bin/java" 1    Le indica al sistema donde se encuentra el jdk y el jre de oracle
+		sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/java/jdk1.8.0_151/bin/javac" 1    Le indica al sistema donde se encuentra el compilador y el jre de oracle
+		sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/java/jdk1.8.0_151/bin/javaws" 1    Le indica al sistema donde se encuentra el compilador y el jre de oracle
+		sudo update-alternatives --set java /usr/local/java/jdk1.8.0_151/bin/java    Le indica al sistema donde que sera la predeterminada
+		sudo update-alternatives --set javac /usr/local/java/jdk1.8.0_151/bin/javac
+		sudo update-alternatives --install --set javaws /usr/local/java/jdk1.8.0_151/bin/javaws
+		source /etc/etc/profile					Recargar los cambios
+		java -version							Verificar la version de java instalado
+		
+============================================================================================================================================
+	
+	https://www.youtube.com/watch?v=GqM4kqWKuys&t=39s
+	INSTALACION DE APACHE TOMCAT:
+		sudo apt-get update
+		sudo apt install openjdk-11-jdk		>> java -version
+		sudo apt-cache search tomcat			Comprueba disponibilidad de los packetes de tomcat
+		sudo apt install tomcat9 tomcat9-admin	Instalacion de tomca >> S para confirmar
+		ss -ltn									Comprobar disponibilidad de puertos para tomcat  (debera aparecer *:8080)
+		sudo ufw allow from any to any port 8080 proto tpc		Añade el puerto al firewall
+		Abrir un explorer y navegar hacua: http://127.0.0.1:8080  >>  debera mostrar TOMCAT
+		sudo nano /etc/tomcat9//tomcat-users.xml					  Agrgar un suurio a la terminal
+			En la seccion <tomcat-users> añdir lo siguiente
+				<role name="admin-gui"/>
+				<role name="manager-gui"/gt; 
+					<user username="tomcat" password="contraseña" roles="admin-gui, manager-gui"/>
+					
+		sudo systemctl restart tomcat9
+		En el explorer escribir:  http://127.0.0.1:8080 /manager/html  >>  escribir usuario y contraseña
+		
+===============================================================================================================================================
+		
+	https://www.youtube.com/watch?v=4NIUg-ayZvI
+	Instalacion de Tomcat 8.5.23
+		Descrgar desde la pagina de tomcat: tar.gz(pgp, md5, sha1)
+		sudo cp -rf apache-tomcat-8.5.23.tar.gz  /opt 	Ir a la carpeta de descargas y copiarlo a la directorio 
+		cd /opt											Ir a la carpeta /op
+		sudo tar -xzvf apache-tomcat-8.5.23.tar.gz		Descomprimir el archivo tar 
+		sudo rm -rf apache-tomcat-8.5.23.tar.gz			Elimnar el comprimido
+		sudo chmod 755 -R apache-tomcat-8.5.23.tar.gz	Asignar permisos a la carpeta
+		cd /apache-tomcat-8.5.23/bin					Ir a la crpeta bin
+		
+	

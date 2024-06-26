@@ -1,0 +1,29 @@
+
+	-------------------------------------------
+		Esto si desplego localmente  mediapp-backend
+	-------------------------------------------
+
+		Descargar el tomcat.zip
+		Variables de entorno:
+			- CATALINA_HOME=carpeta instalacion tomcat
+			CLASSPATH= inatalacion java = JAVA_HOME%\bin; %CATALINA_HOME%\lib\servlet-api.jar; %CATALINA_HOME%\lib\jsp-api.jar;
+			path: +path + %CATALINA_HOME%\bin		(sin ; al final)
+			
+		Usuarios de administracion gui:
+		apache-tomcat-9.0.38\conf\tomcat-users.xml
+			<tomcat-users xmlns="http:.....
+				.....
+			version="1.0">
+			<user username="admin" password="admin" roles="manager-gui, admin-gui"/>
+			
+		Cambiar el tamaño del war de carga en: apache-tomcat-9.0.38\webapps\manager\WEB-INF\web.xml
+			<multipart-config>
+			  <!-- 50MB max -->
+			  <max-file-size>90428800</max-file-size>
+			  <max-request-size>90428800</max-request-size>
+			  <file-size-threshold>0</file-size-threshold>
+			</multipart-config>
+			
+		En una linea de comando Windows: 
+			%CATALINA_HOME%\bin\startup.bat			(para iniciar tomcat)
+			%CATALINA_HOME%\bin\startup.bat			(para detener tomcat)

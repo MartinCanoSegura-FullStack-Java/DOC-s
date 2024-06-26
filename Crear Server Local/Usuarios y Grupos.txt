@@ -1,0 +1,48 @@
+
+
+	USUARIOS Y GRUPOS:
+	
+	https://www.zeppelinux.es/como-agregar-un-usuario-a-un-grupo-en-linux/
+	* Los grupos se utilizan en Linux para organizar a los usuarios. Son conjuntos de cuentas de usuarios que comparten permisos.
+	* todos los usuarios tienen asignado un identificador de usuario (UID) y todos los grupos, un identificador de grupo (GID).
+	* Los grupos de sistema se identifican con GIDs que van del 1 al 499, este rango de números son identificadores de grupo reservados para el sistema.
+	
+	crear un nuevo grupo de usuarios:
+	sudo groupadd nombreGrupo  |  sudo addgroup nombreGrupo
+	
+	crear un nuevo grupo de sistema:
+	sudo -r groupadd nombreGrupo  | $ sudo addgroup --system nombreGrupo	
+	
+	sudo groupdel nombreGrupo		Borrar un grupo
+	
+	lo normal es que de forma automática, se agregue al usuario recién creado a un grupo por defecto. 
+	Normalmente, el nombre de este grupo por defecto coincide con su nombre de usuario
+	
+	agregar un usuario a varios grupos en el momento de crearlo 
+	sudo useradd mortadelo -m -g latia -G investigacion,secreto
+		-m : Crea el directorio personal en /home/mortadelo.
+		-g : En vez de crearse por defecto el grupo mortadelo y agregarlo a el, 
+			 lo que hacemos es incluir al usuario mortadelo al grupo por defecto latia. 
+			 Si omitimos esta opción, se creará el grupo por defecto mortadelo y será agregado a el.
+		-G : Añadimos a mortadelo a los grupos secundarios investigacion y secreto.
+	
+	agregar un usuario existente a un grupo existente
+		añadido al usuario filemon al grupo secreto.
+		sudo usermod -a -G secreto filemon	|  sudo gpasswd -a nombreUsuario nombreGrupo  |  sudo adduser nombreUsuario nombreGrupo
+		
+	cambiar a un usuario de grupo por defecto, ya existen el usuario y el grupo, podemos cambiar a un usuario de grupo por defecto
+		sudo usermod -g laabuela mortadelo		sacamos del grupo por defecto latia al usuario mortadelo y le asignamos el grupo por defecto laabuela.
+	
+	eliminar un usuario de un grupo al que pertenece
+		sudo usermod -R nombreGrupo nombreUsuario  |  sudo gpasswd -d nombreUsuario nombreGrupo  |  sudo deluser nombreUsuario nombreGrupo
+		
+	groups nombreUsuario		mostrar los grupos a los que pertenece un usuario
+	
+	getent group group-name		visualizar quién es miembro de un grupo
+	
+	cat /etc/passwd					Muestra todos los usuarios del sistema
+		nano /etc/group					Muestra todos los grupos del servidor (los usuarios se asocian a grupos para otorgar privilegios de grupo)
+			en esta misma pantalla se pueden agregar mas usuarios por ejemplo:
+			plugdev:x:46:useroo1, user002, user003, ...
+		nano /etc/shadow 				Contiene informacion del sistema y de los usuarios (guarda la contraseñas "encriptadas" de acceso y los permisos de acceso)
+		

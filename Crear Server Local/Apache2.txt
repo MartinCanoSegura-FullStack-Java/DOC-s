@@ -1,0 +1,7 @@
+
+
+
+		APACHE2    (INICIAR - DETENER)
+		
+		sudo service apache2 restart
+		sudo service apache2 stop

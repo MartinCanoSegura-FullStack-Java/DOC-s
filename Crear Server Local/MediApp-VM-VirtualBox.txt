@@ -1,0 +1,101 @@
+
+
+		**************************************************************************************************************************************
+		******************************************* JACK RABBIT servidor de documentos ligado a una base de datos ****************************
+		**************************************************************************************************************************************
+
+		Maquina Virtual: 	Ubuntu2204
+		Nombre Usuario: 	mcs
+		Contraseña:			mcs007
+		servidor: 			ubuntu
+		usuario:			mcs
+		contraseña:			mcs007
+
+		tomcat
+			user: admin
+			pass: admin
+		-------------------------------------------------------
+				MITOCODE
+		-------------------------------------------------------	
+		Instalar jdk:
+		sudo apt-get install openjdk-8-jdk				||  			 sudo apt install default-jdk 			
+		
+		sudo sh statup.sh							Iniciar tomcat (estando en la carpeta /bin)
+		sudo sh shutdown.sh
+		
+		java -version									Verificar version de java
+		sudo apt-get update
+		sudo apt dist-upgrade
+		Instalar Apache tomcat (del manual: instalacio tomcat en linux (ubuntu.txt))
+		
+		
+		
+		sudo apt-get install nginx					Instalar el servidor Nginx
+		sudo ufw app list							Verifica si estan abiertas los servicios http, https, openssh en el firewall
+		sudo ufw allow 'Nginx HTTP'					Solo en caso de estar cerrados
+		systemctl status nginx						Vericar si Ngins esta levantado  >> q para salir
+		sudo nano /etc/nginx/sites-enbled/default	Modificar la tabla de ruteo
+		sudo service nginx restart					Reiniciar los servicio de Nginx
+		Comprobar en el explorer http://192.168.100.10/ deberia ir al tomcat
+		
+	CAMBIOS PARA LLEVAR A UN SERVER 
+		1. HOST: 'http://localhost:8080', >>  HOST: 'http://192.168.100.10:8080/mediapp-backend', 
+		2. A parti de aqui ya se puede generar el compilado final (EN AGULAR <=10: ng build --prod) (EN ANGULAR >= 14: ng build --configuration production --aot)
+		   y ya no es necesario tener el archivo environment.prod.ts
+		3. En el archivo index.html linea 6 (<base href="/">), agregamos un punto como se muestra(<base href="./">), para que los ficheros de la raiz sean vistos.
+		4. Para que al hacer F5 (actualizar la pagina de despliegue no se pierda la URL)
+		
+		
+		------------------------------------------------------------------------------
+		Instacion de PostgreSQL en ubuntu
+		sudo apt-get install postgresql postgresql-contrib			Instala PostgreSQL
+		sudo -u postgres psql										Entrar a la consola de administracion de comandos postgres
+		alter user postgres with password 'postgre';				Cambiar el pass del usuario
+		create database mediappbd;									Crear la base de datos.
+		\connect mediappbd;											Conectarse a la base de datos
+		\dt 														Listar todas las tablas de la base de datos a la que se legeo
+		Crear las tablas que no se crean con el arranque del app
+			create table oauth_access_token (
+			  token_id VARCHAR(256),
+			  token bytea,
+			  authentication_id VARCHAR(256),
+			  user_name VARCHAR(256),
+			  client_id VARCHAR(256),
+			  authentication bytea,
+			  refresh_token VARCHAR(256)
+			);
+
+			create table oauth_refresh_token (
+			  token_id VARCHAR(256),
+			  token bytea,
+			  authentication bytea
+			);
+			
+		sudo nano /etc/nginx/nginx.conf					Se modifico el archivo porque decia que el archivo era demasiado grande
+			http {
+				client_max_body_size 100M;				se agrego esta linea
+				…etc
+						
+		se modifico el archivo 
+		sudo nano /opt/tomcat/webapps/manager/WEB-INF/web.xml
+			<multipart-config>
+			   <max-file-size>52428800</max-file-size>			--> 	<max-file-size>90000000</max-file-size>
+			   <max-request-size>52428800</max-request-size>  	--> 	<max-request-size>90000000</max-request-size>
+			   <file-size-threshold>0<</file-size-threshold>
+			</multipart-config>
+	
+	===========================================
+	ng build --configuration production				Generar el codigo final del frontend
+	==========================================
+	
+	
+	
+	Aceder a la base MediaAppBd de datos remotamente:--------------------------
+		sudo nano /etc/postgresql/14/main/postgresql.conf
+			listen_addresses = '*' 							Sustituye 'localhost' por '*' y descomenta la línea eliminando #:
+		sudo nano /etc/postgresql/14/main/pg_hba.conf			 		Añade al final del fichero las siguientes líneas:
+			host    all      all              0.0.0.0/0                    md5
+			host    all      all              ::/0                         md5
+			
+		systemctl restart postgresql.service				 reinicia el servicio de PostgreSQL
+			

@@ -1,0 +1,78 @@
+
+	MI IP PUBLICA: 187.190.167.139    Ricardo=187.190.190.0
+
+
+	https://www.youtube.com/watch?v=AOA06CPic08&t=988s
+
+	CREAR MI PROPIO SERVIDOR WEB REMOTO DESDE CASA
+     • Ubuntu 20.04 LTS
+
+ 1) CREAR Y CONFIGURAR NUESTRO NOMBRE DDNS
+    
+     • https://www.noip.com/
+        ◦ Dynamic DNS
+        ◦ Create Hostname
+        ◦ redesplus
+
+ 2) CONFIGURAR EL EQUIPO
+     • Maquina Virtual - Adaptador Puente
+
+ 3) COMPROBAR LA RESOLUCIÓN DE NOMBRES DDNS
+     • Comprobar que tenemos Internet
+        ◦ networkctl status
+     • nslookup redesplus.ddns.net
+     • clear
+
+ 4) CONFIGURAR EL ROUTER/EQUIPO PARA QUE SE ACTUALICE
+ 
+ 5) INSTALAR APACHE
+     • sudo apt-get update
+     • sudo apt-get install apache2
+
+ 6) CONFIGURAR NUESTRA PÁGINA WEB
+     • ls /var/www/html/
+     • sudo nano /var/www/html/index.html
+
+
+ 7) CONFIGURAR EL ROUTER
+     • Configurar la tabla NAT del Router
+     • Configurar el Firewall
+        ◦ Verificar que el puerto 80 no está bloqueado
+     • Comprobar puertos de entradas
+        ◦ ss -ltpan
+        ◦ nmap redesplus.ddns.net -p 80 
+  sudo apt-get install nmap
+
+ 8) COMPROBAR EL FUNCIONAMIENTO DEL SERVICIO
+ 
+ ****************************************************************************************************
+ https://www.youtube.com/watch?v=qQWlk0Xei9E
+	ingresamos a la Carpeta
+	cd /etc/systemd/system
+
+	Creamos El Scrip
+	sudo nano noip2.service
+
+	Pegamos
+	----------------
+	[Unit]
+	Description=No-Ip Dynamic DNS Update Service
+	After=network.target
+
+	[Service]
+	Type=forking
+	ExecStart=/usr/local/bin/noip2
+
+	[Install]
+	WantedBy=multi-user.target
+	----------------------
+
+	Recargamos los servicios incluido el agregado
+	systemctl daemon-reload
+
+	Habilitamos el Servicio para cualquier reinicio
+	systemctl enable /etc/systemd/system/noip2.service
+
+	Chequear funcionamiento del servicio
+	sudo service noip2.service start
+	sudo systemctl status noip2.service

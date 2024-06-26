@@ -1,0 +1,127 @@
+		
+		https://www.youtube.com/watch?v=0B-DCQXOhck&list=PL2Z95CSZ1N4GQUzO4aGda6UEmq4yqPLMN&index=4
+
+		man <comando>					Muestra todas las opciones de parametro para ejecusion del
+		
+		sudo su -						Accesar como super usuario (no conserva las variables de entorno del usuario anterior)
+		exit | Ctr+T					Deslogearse de lusuario root
+		su - mysql						Ejemplo en el que si accesamos al usuario de mysql elimina las variables de entorno
+		lastlog -u user001				Informa la ultima vez que se logeo el usuario
+		
+		useradd -c "MArtin Cano" -g 10 -d /home/usuario01 -m -s /bin/bash usuario01    Crearcion de un usuario sin permisos de root (el comando se ejecuta con usuario root)
+		passwd usurio01	>> ingresa pasword, confirma password.						   Asignarle password al usuario creado.
+		
+		df -h							Muestra la informacion de los file systems
+		df -Th							Muestra la informacion de los file systems pero con caractericticas mas precisas
+		free -m							Muestra informacion de la memoria
+		top								Informacion sobre las treas en ejecusion (analogo l sdministrador de tareas de windows)
+		lsblk -f						Informacion sobre el sistema de archivos
+		fsck 							Verifica y repara en caso de ser necesario el sistema de archivos del servidor de forma segura y practica
+		blkid							Obtiene informacion sobre los bloques de sispositivos disponibles en sistema (solo funciona con root)
+		cdfdisk							Software que permite ver en pantalla que particiones de disco disponemos, asi como gestionarlas
+		fdisk -la						muestra los discos en el sistema, sistema de archivos del servidor
+		apt search lvm2					Buesca si el comando o app se encuentra instalada
+		
+		poweroff						Apagar el servidor de forma corrcta
+		logout							Cierrasesion del usuario
+		sudo reboot						Reiniciar el servidor
+		logout 							Cerrar sesión (si solo hay uno, equivale a cerrar sesión, si desde un intérprete o usuario hemos accedido a otro intérprete o logueado con otro usuario nos cerrará el último y devolverá al anterior)
+		
+		pvcreate /dev/sdb				Asignar el control de lvm los discos (volumenes fijos) creados, formateando el disco virtual
+		vgcreate data /dev/sdb			Cerar un volume group para agregar las unidades (volumenes ) de disco recien creados
+		vgdisply						Muestra informacion detallada del volumen creado
+		lvcreate -L4G -n prueba-lvm data	Logical volume de los discos creados
+		lvdisplay							Muestra la informacion completa de los volumenes creados
+		lvrename data2 prueba-lvm prueba-lvm2		Renombra el nombre volumen creado a otro deseado
+		mkfs.ext4 /dev/data/prueba-lvm				Creacion del file system para cada vilumen creado en este caso para el vulumen prueba-lvm
+		mkfs.ext4 /dev/data/prueba-lvm2				Creacion del file system para cada vilumen creado en este caso para el vulumen prueba-lvm
+		cd temp/ , prueba-lvm 						Cear directorio (carpeta) prueba-lvm para el montaje del file syste dentro del directorio /temp
+		Montar los file system que que hancreado
+		
+		------------------------------------------------------------------------------
+		
+		https://www.youtube.com/watch?v=L906Kti3gzE
+		apps <--> Kernel <--> Harware
+		
+		usuario@nomServer:~$			Prompt linux, ~ representa la ruta desde el home /home/user
+		
+		Directorios ------------------------------------------------------------------------------------------------------------------------------------
+		/home/<user>					Home es directorio base de todos los usuarios, cada uno con su propia estructura de directorios
+		/								Raiz de directrios
+		/dev							devices (dispositivos)	
+		/bin							Ejecutables
+		/boot							Archivos de inicio del sistema operativo
+		/root							directorio home del usuario root (super administrador)
+		
+		ls 	[-a -l]						listar directorios (-a mostrar ocultos, -l en forma de lista)
+		ls -al [nomArch *.ext]			Listar (mostra) archivos o filtrando por extension
+		clear							limpiar la pantalla
+		cd [.. nomDir]					Moverse a un directorio con ruta relativa (.. sube al directorio padre, ruta nombre del directorio), cd + tab sugiere el directorio 
+		cd [/nomDir]					Moverser a un directorio con ruta absoluta, presiona dos veces tab para sugerir directorios o enter para omitir sugerencia
+		cd ~ 							Moverse al home del usuario (/home/user)
+		tecla arriba, tecla abajo		Navegar entre el historial de los comandos tecleados en la terminal
+		
+		touch nomArchivo				Creacion o modificacio la fecha de creacion de un archivo
+		cp <archOriginal> <archCopia>	Hacer copia de un archivo
+		cp -r <dir> <dirCopia>			Hace una copia de un directorio (incluyendo su contenido)
+		
+		mv <archivo> <archRen>			Mover o renombrar un archivo
+		mv <dir>/ <nomDir>				Mover o renombrar directorio (manteniendo los archivos contenidos)
+		mv -v <dir>/ <nomDir>			Renombra explicitamente el drectorio
+		
+		makedir <nomDir>				Crear un directorio
+		rmdir <nomDir>					Eliminar directorio
+		rm <nomArch>					Elimina archivo
+		rm -r <nomDir>					Elimina directorio aun si contiene archivos
+		
+	GRUPOS:
+		cat /etc/passwd					Muestra todos los usuarios del sistema
+		nano /etc/group					Muestra todos los grupos del servidor (los usuarios se asocian a grupos para otorgar privilegios de grupo)
+			en esta misma pantalla se pueden agregar mas usuarios por ejemplo:
+			plugdev:x:46:useroo1, user002, user003, ...
+		nano /etc/shadow 				Contiene informacion del sistema y de los usuarios (guarda la contraseñas "encriptadas" de acceso y los permisos de acceso)
+		
+		passwd user001					Hacer cambio de contraseña >> pedira la nueva contraseña y su confirmacion
+		
+		networkctl status 				Comprobar la ip en la red privada y si tenemos acceso a internet
+		ss -ltp							Muestra informacion sobre el estado de los puertos
+		
+		sudo apt-get install nmap		App para verificar si el router y el server tienen el puerto 80 abierto y el server esta respondiendo
+		sudo redesplus.dns.net -p 80 	Le pregunta a nmap por el nombre de redesplus.dns.net y por el puerto 80
+		
+		sudo adduser <username>						Crear nuevo usuario
+		sudo usermod -aG sudo <username>			Agregar el usuario a un grupo
+		su - <usuario>								Para hacer uso del usuario
+		exit 										Cerrar sesion del usuario
+		sudo deluser username						elinar usuario
+		sudo deluser --remove-home <username>		eliminar el directorio de inicio del usuario y su contenido
+		
+		passwd						cambiar la contraseña del usuario logeado
+		sudo password <username>	cambiar la contraseña de otro usuario, debe tener derechos de administrador y nombre de usuario
+		
+		mdir o rm -d <dir>			para eliminar directorios vacíos
+		rm -r  <dir>				para eliminar directorios no vacíos
+		exit  ó Ctrl-D				salir de usuario root en linux ubuntu
+		
+		skill nombre_de_usuario 	Cerrar sesión.
+		shutdown –r					reinicia el sistema
+
+		ip a    |    ip addr		Para saber la IP actual de nuestro dispositivo
+		cat /etc/os-release
+		free -h						Uso de memoria ram
+		df -h						Uso de espacio en disco y de cada directorio
+		ls -la						Listado de carpetas con permisos de acceso
+		ls -la /					Listado de carpetas y subcarpetas con permisos de acceso
+		cat /proc/swaps				
+		
+		
+		sudo apt upgrade			Instalar actualizaciones
+		sudo apt dist-upgrade
+		
+		sudo -s						Identificarse como usuario root
+		vi /etc/netplan/00-installer-config.yaml  	configurar conexiones
+		nano /etc/netplan/00-installer-config.yaml			configurar conexiones	
+		netplan apply				Apicar la configuracion del cambio
+		ip addr
+		ip a 						Configuracion de conexion DHCP
+		chmod 777 <nombre_archivo.ext>   Otorga todos los permisos al archivo  

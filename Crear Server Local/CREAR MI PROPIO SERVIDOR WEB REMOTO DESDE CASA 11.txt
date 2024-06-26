@@ -1,0 +1,84 @@
+
+
+
+	https://www.youtube.com/watch?v=AOA06CPic08
+	
+	CREAR MI PROPIO SERVIDOR WEB REMOTO DESDE CASA
+     • Ubuntu 20.04 LTS
+
+ 1) CREAR Y CONFIGURAR NUESTRO NOMBRE DDNS
+    
+     • https://www.noip.com/
+        ◦ Dynamic DNS
+        ◦ Create Hostname
+        ◦ redesplus
+
+ 2) CONFIGURAR EL EQUIPO
+     • Maquina Virtual - Adaptador Puente
+
+ 3) COMPROBAR LA RESOLUCIÓN DE NOMBRES DDNS
+     • Comprobar que tenemos Internet
+        ◦ networkctl status
+     • nslookup redesplus.ddns.net
+     • clear
+
+ 4) CONFIGURAR EL ROUTER/EQUIPO PARA QUE SE ACTUALICE
+
+  • Configuración del servidor de nombres dinámicos(DynDNS)
+  • Instalar el cliente no-ip en Ubuntu 
+            
+
+ • 📢Como instalar el CLIENTE No-IP en Li...  
+
+
+ 5) INSTALAR APACHE
+     • sudo apt-get update
+     • sudo apt-get install apache2
+
+ 6) CONFIGURAR NUESTRA PÁGINA WEB
+     • ls /var/www/html/
+     • sudo nano /var/www/html/index.html
+
+
+ 7) CONFIGURAR EL ROUTER
+     • Configurar la tabla NAT del Router
+     • Configurar el Firewall
+        ◦ Verificar que el puerto 80 no está bloqueado
+     • Comprobar puertos de entradas
+        ◦ ss -ltpan
+        ◦ nmap redesplus.ddns.net -p 80 
+  sudo apt-get install nmap
+
+ 8) COMPROBAR EL FUNCIONAMIENTO DEL SERVICIO
+	-----------------------------------------
+	 nslookup xanum.ddns.net
+		Server:         127.0.0.53
+		Address:        127.0.0.53#53
+
+		Non-authoritative answer:
+		Name:   xanum.ddns.net
+		Address: 187.188.14.231
+	-----------------------------------
+	 networkctl status
+		●        State: routable
+		  Online state: online
+			   Address: 192.168.100.10 on wlo1
+						2806:2f0:a0e0:e325:8219:34ff:fee9:9efe on wlo1
+						fe80::8219:34ff:fee9:9efe on wlo1
+			   Gateway: 192.168.100.1 on wlo1
+						fe80::1 on wlo1
+				   DNS: 192.168.100.1
+
+		nov 03 18:58:32 xanum systemd-networkd[734]: Enumeration completed
+		nov 03 18:58:32 xanum systemd-networkd[734]: wlo1: Link DOWN
+		nov 03 18:58:32 xanum systemd[1]: Started Network Configuration.
+		nov 03 18:58:32 xanum systemd-networkd[734]: wlo1: Link UP
+		nov 03 18:58:32 xanum systemd[1]: Starting Wait for Network to be Configured...
+		nov 03 18:58:34 xanum systemd-networkd[734]: wlo1: Connected WiFi access point: Totalplay-A5A7 (a4:7c:c9:3b:df:b4)
+		nov 03 18:58:34 xanum systemd-networkd[734]: wlo1: Gained carrier
+		nov 03 18:58:36 xanum systemd-networkd[734]: wlo1: Gained IPv6LL
+		nov 03 18:58:36 xanum systemd-networkd[734]: wlo1: DHCPv4 address 192.168.100.10/24 via 192.168.100.1
+		nov 03 18:58:36 xanum systemd[1]: Finished Wait for Network to be Configured.
+
+
+32034556

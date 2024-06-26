@@ -1,0 +1,136 @@
+
+
+	https://www.youtube.com/watch?v=KbfkwyWo6v4
+	
+	TOMACT 10/8:
+	
+	sudo apt install default-jdk
+	
+	sudo groupadd tomcat										Crea un grupo de usuarios tomcat
+	sudo useradd -s /bin/false -g tomcat -d /opt/tomcat	tomcat	Crea la cuenta de tomcat
+	cd /opt/													ir al a carpeta opt
+	sudo curl -O https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.38/bin/apache-tomcat-9.0.38.tar.gz		Instalar desde la pagina de descargas
+	sudo mkdir /opt/tomcat 										Crea directorio
+	sudo tar xzvf apache-tomcat-*tar.gz -C /opt/tomcat --strip-components=1			Descomprime el .tar.gz en la carpeta /opt/tomcat
+**	sudo chmod 755 -R apache-tomcat-8.5.23.tar.gz				Asignar permisos a la carpeta 
+	cd tomcat
+	sudo chgrp -R tomcat /opt/tomcat							Cambia el grupo de forma recursiva al directorio /opt/tomcat y sus archivos
+	sudo chmod -R g+r conf 										Permisos de lectura al grupo a la carpeta conf
+	sudo chmod g+x conf											Permisos de ejecusion al grupo a la carpeta conf
+	sudo chown -R tomcat webapps/ work/ temp/ logs/				Asigna la cuenta tomcat a los directorio   
+	sudo update-java-alternatives -l 							Revisa si el servidor tien mas alternativas para java  >> java-1.8.0-openjdk-amd64       1081       /usr/lib/jvm/java-1.8.0-openjdk-amd64
+	sudo nano /etc/systemd/system/tomcat.service				Crea archivo de sistem para iniciar el servicio de tomcat (parar, detener, reiniciar)
+		CONENIDO DEL ARCHIVO tomcat.service:
+		------------------------------------------------------------------------------
+[Unit]
+Description=Apche Tomcat Web Application Container
+After=network.target
+
+[Service]
+Type=forking
+
+Environment='JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+Environment='CATALNA_HOME=/opt/tomcat/'
+Environment='CATALINA_PID=/opt/tomcat/temp/tomcat.pid'
+Environment='CATALINA_BASE=/opt/tomcat/'
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+		--------------------------------------------------------------------------------
+		
+	sudo systemctl daemon-reload								Para que tome el nuevo servicio creado
+	sudo systemctl enable tomcat 								Activar el servicio de tomcat cada se inicie el servidor
+	sudo systemctl start tomcat									Iiciar el servicio
+	sudo systemctl status tomcat								Verificar que ele servicio se este ejecutando  >> salimos con q
+	sudo ufw allow 8080											Agrea el puerto 8080 de tcp para permitir conexiones al tomcat
+	sudo nano /opt/tomcat/conf/tomcat-users.xml					Crear usurio para la web de administracion
+		CONTENIDO DEL ARCHIVO tomcat-users.xml:
+		--------------------------------------------------------------------------------
+		<tomcat-users xmlns="http:.....
+				.....
+			version="1.0">
+		<user username="admin" password="admin" roles="manager-gui, admin-gui"/>
+		--------------------------------------------------------------------------------
+		
+	sudo nano /opt/tomcat/webapps/manager/META-INF/context.xml		Conectarse desde cualquier ip
+		CONTENIDO DEL ARCHIVO contest.xml
+		--------------------------------------------------------------------------------
+		<context antiResourceLocking="false" ...>
+			<CookieProcessor clasName="org.apache....../>
+				<Valve clasName="org.apache...../>					<----- comentar esta linea
+			<Manager sessionAtributeValueClassNameFilter="java ... />
+			
+		--------------------------------------------------------------------------------
+	
+	sudo nano /opt/tomcat/webapps/host-manager/META-INF/context.xml
+	--------------------------------------------------------------------------------
+	<context antiResourceLocking="false" ...>
+			<CookieProcessor clasName="org.apache....../>
+				<Valve clasName="org.apache...../>					<----- comentar esta linea
+			<Manager sessionAtributeValueClassNameFilter="java ... />
+	--------------------------------------------------------------------------------
+			
+	sudo systemctl restart tomcat					Reiniciar el servicio de tomcat
+	sudo systemctl status tomcat					Verificar el estatus de tomcat >> salimos com q
+	http://IP-TOMCAT:8080							Navegar a la ip del serfvidor
+	
+	
+	DES INSTALAR TOMCAT:
+		cd /opt
+		sudo rm -rf tomcat
+		
+		sudo apt remove --purge tomcat10 tomcat10-docs
+		sudo apt autoremove
+		sudo apt autoclean
+		
+		sudo apt install locate && sudo updatedb
+		locate tomcat
+		
+		netstat -aon | findstr 80  procesos que ocupan el puerto 80 en windows
+		
+		
+		
+		=======================================================================
+		Otro ejemplo de archivo tomcat.service
+		https://gist.github.com/drmalex07/e6e99dad070a78d5dab24ff3ae032ed1
+		=================================================================
+		
+[Unit]
+Description=Tomcat - instance %i
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment='JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64'
+Environment='JAVA_OPTS=-Djava.security.egd=file:///dev/urandom'
+
+Environment='CATALNA_HOME=/opt/tomcat/'
+Environment='CATALINA_PID=/var/tomcat/%i/run/tomcat.pid'
+Environment='CATALINA_BASE=/opt/tomcat/%i/'
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+Environment='CLASSPATH=CATALINA_HOME\lib\servlet-api.jar CATALINA_HOME\lib\jsp-api.jar'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
