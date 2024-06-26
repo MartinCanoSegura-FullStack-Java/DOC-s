@@ -1,4 +1,4 @@
-- Si se descarga el proyecto / documentos y no quiere hacer el push
+- Si se descarga el proyecto o documentos y no quiere hacer el push
 1. Revisar que git:https://github.com  tenga nombre de usuario:martin.cano.segura@gmail.com
    La contraseña sea un token generado (no me acurdo del password) a lo mejor es: C@sm660617U77
 	
