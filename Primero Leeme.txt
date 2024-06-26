@@ -1,4 +1,6 @@
-- Si se descarga el proyecto o documentos y no quiere hacer el push
-1. Revisar que git:https://github.com  tenga nombre de usuario:martin.cano.segura@gmail.com
-   La contraseña sea un token generado (no me acurdo del password) a lo mejor es: C@sm660617U77
+* Si se descarga algun proyecto o documentos y no quiere hacer el push
+	Abrir el admininistrador de Credenciales:
+	Panel de control\Todos los lementos de Panel control\Administrador de credenciales
+	Revisar que git:https://github.com  tenga nombre de usuario:martin.cano.segura@gmail.com
+	La contraseña sea un token generado (no me acurdo del password) a lo mejor es: C@sm660617U77
 	
