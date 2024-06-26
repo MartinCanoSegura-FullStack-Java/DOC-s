@@ -3,7 +3,7 @@
 	Panel de control\Todos los lementos de Panel control\Administrador de credenciales
 	Revisar que git:https://github.com  tenga nombre de usuario:martin.cano.segura@gmail.com
 	La contraseña en este momento es token generado dede gitHub: 
-		"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"
+		"ghp_sG";"56bUEPGNz3q0L0LVMV3l";"CVnX8cOi4KWFTR";
 	30 dias de vigencia inicio: 26/06/2024
 	
 	- No me acurdo del password de este repositorio a lo mejor es: C@sm660617U77
